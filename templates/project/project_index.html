@@ -1,0 +1,99 @@
+{% extends "project/index.html" %}
+
+{% block index_content %}
+  <!--Main layout-->
+
+<h2 class="text-center">Projects</h2>
+{% comment %} <div class="container">
+    <div class="row">
+        <div class="col-md-12 mb-4 text-center wow fadeIn"> {% endcomment %}
+          
+        {% comment %} </div>
+    </div>
+</div> {% endcomment %}
+  <div class="row">
+    {% comment %} <div class="col">
+      
+    </div> {% endcomment %}
+    {% if request.user.is_admin %}
+    <div class="col">
+      <div class="text-center" id="create" style="width: 200px; height: 30px; margin: 0px 20px; background-color: #007E33;">
+          <span class="text-center" style="color:white;">Create a Project</span>
+      </div><br>
+      <form id="project_form" method="POST"> 
+      {% csrf_token %}
+        <div>
+          <input type="text" name="project_name" placeholder="Name of project"/>
+        </div><br>
+          <div>
+            <span>Project Manager</span>
+            <select name="project_manager">
+              {% for user in users %}
+                <option value='{{ user.id }}'>{{ user.full_name }}</option>
+              
+              {% endfor %}
+                <option value='{{ request.user.id }}'>{{ request.user.full_name }}</option>
+            </select>
+          </div> <br>
+        <button class="btn btn-primary" id="submit" type="submit">create project</button>
+      </form>
+    </div>
+     {% endif %}
+  </div>
+ 
+
+<div class="row mt-5">
+  <div class="col-12">
+  {% if projects %}
+   <h3>List of Projects</h3>
+  {% for project in projects %}
+    
+   
+    {% comment %} <div class="d-flex flex-column"> {% endcomment %}
+      <div class="p-2 mb-2 w-100">
+        <p class="note note-primary">
+         <a href="{{ project.get_absolute_url }}">{{ project.name }}</a><br>
+          <small>{{ project.project_manager.full_name }}</small>
+        </p>
+        
+      </div>
+      {% comment %} <div class="p-2">Flex item 2</div>
+      <div class="p-2">Flex item 3</div> {% endcomment %}
+    {% comment %} </div> {% endcomment %}
+    
+    
+  {% endfor %}
+  {% else %}
+     {% if request.user.is_admin %}
+      <h3>You do not have any project yet, create projects above</h3>
+      {% else %}
+      <h3>You do not have any project yet, contact your administator to create one!</h3>
+     {% endif %}
+  {% endif %}
+  </div>
+  
+</div>
+
+<script type="text/javascript">
+  var project = document.getElementById("project_form");
+  const sub = document.querySelector('#submit');
+  const btn = document.querySelector('#create');
+
+  {% comment %} const rbs = document.querySelectorAll('input[name="form-check-input"]'); {% endcomment %}
+    {% comment %} if(btn.checked) {
+        divworkplace.style.display = "block";  
+    }  {% endcomment %}
+    project.style.display = "none";
+
+    btn.addEventListener("click", function(){
+        project.style.display = "block";
+        console.log("project");
+    });
+    sub.addEventListener("click", function(){
+        project.style.display = "none";
+        console.log("project");
+    });
+
+
+</script>
+{% endblock %}

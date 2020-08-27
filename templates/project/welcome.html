@@ -1,0 +1,105 @@
+{% extends "project/index.html" %}
+
+{% block index_content %}
+  <!--Main layout-->
+{% comment %} {% if users_count > 1 %}
+  <p>we have users</p>
+{% else %}
+  <p>We dont have</p>
+{% endif %} {% endcomment %}
+<div class="container">
+<div class="row">
+<div class="col-md-12 mb-4 text-center wow fadeIn">
+<div class="d-flex flex-row justify-content-center">
+  <div class="p-2">
+    <!-- Card -->
+    <div class="card w-75 mh-25">
+
+      <!-- Card image -->
+      <div class="view overlay">
+        <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/men.jpg"
+          alt="Card image cap">
+        <a href="{% url 'account:manage_users' workplace %}">
+          <div class="mask rgba-white-slight"></div>
+        </a>
+      </div>
+
+      <!-- Card content -->
+      <div class="card-body">
+
+        <!-- Title -->
+        <h4 class="card-title">Manage Users</h4>
+        <!-- Text -->
+        <p class="card-text">You can invite users to your workplace and manage them.</p>
+        <!-- Button -->
+        <a href="{% url 'account:manage_users' workplace %}" class="btn btn-primary">Users</a>
+
+      </div>
+
+    </div>
+    <!-- Card -->
+   
+  </div>
+  <div class="p-2">
+    <!-- Card -->
+    <div class="card w-75 mh-25">
+
+      <!-- Card image -->
+      <div class="view overlay">
+        <img class="card-img-top" src="https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(67).jpg"
+          alt="Card image cap">
+        <a href="{% url 'projects:index' workplace %}">
+          <div class="mask rgba-white-slight"></div>
+        </a>
+      </div>
+
+      <!-- Card content -->
+      <div class="card-body">
+
+        <!-- Title -->
+        <h4 class="card-title">Create a Project</h4>
+        <!-- Text -->
+        <p class="card-text">Create a projects and create tasks under them to organize your tasks more efficiently.</p>
+        <!-- Button -->
+        <a href="{% url 'projects:index' workplace %}" class="btn btn-primary">Button</a>
+
+      </div>
+
+    </div>
+    <!-- Card -->
+  </div>
+  <div class="p-2">
+    <!-- Card -->
+    <div class="card w-75 mh-25">
+
+      <!-- Card image -->
+      <div class="view overlay">
+        <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/men.jpg"
+          alt="Card image cap">
+        <a href="#!">
+          <div class="mask rgba-white-slight"></div>
+        </a>
+      </div>
+
+      <!-- Card content -->
+      <div class="card-body">
+
+        <!-- Title -->
+        <h4 class="card-title">All Tasks</h4>
+        <!-- Text -->
+        <p class="card-text">You can create tasks here and view all tasks irrespective of their projects.</p>
+        <!-- Button -->
+        <a href="#" class="btn btn-primary">Button</a>
+
+      </div>
+
+    </div>
+    <!-- Card -->
+  </div>
+</div>
+</div>
+</div>
+</div>
+
+
+{% endblock %}

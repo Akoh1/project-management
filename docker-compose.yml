@@ -1,0 +1,50 @@
+version: '3.3'
+
+    
+services:
+
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      # - .env
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      # - POSTGRES_DB=${DB_PORT}
+      # - POSTGRES_USER=project_manager
+      # - POSTGRES_PASSWORD=password
+      # - POSTGRES_DB=project_management
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: gunicorn project_management.wsgi:application --bind 0.0.0.0:8000
+    # command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - static_volume:/home/app/staticfiles
+      # - .:/code
+    # ports:
+    #   - 8000:8000
+    expose:
+      - 8000
+    depends_on:
+      - db
+    env_file:
+    - .env
+
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/home/app/staticfiles
+    ports:
+      - 1337:80
+    depends_on:
+      - web
+        
+    
+volumes:
+  postgres_data:
+  static_volume:

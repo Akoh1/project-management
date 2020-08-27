@@ -1,0 +1,246 @@
+{% extends "project/index.html" %}
+
+{% block index_content %}
+  <!--Main layout-->
+
+
+{% comment %} <div class="container">
+    <div class="row">
+        <div class="col-md-12 mb-4 text-center wow fadeIn"> {% endcomment %}
+          
+        {% comment %} </div>
+    </div>
+</div> {% endcomment %}
+  <div class="row mb-3">
+    <h2>Task Detail</h2>
+    {% comment %} <a href="#" class="feedback-form-btn btn btn-success btn-lg" id="OpenForm">Feedback</a> {% endcomment %}
+    <div class="col-12">
+      {% comment %} {% if task_detail.status_id.status == 'ass' %}
+        <button type="button" class="btn btn-success float-left">Start task</button>
+      {% elif task_detail.status_id.status == 'prog' %}
+        <button type="button" class="btn btn-success float-left">Finish</button>
+      {% elif task_detail.status_id.status == 'comp' %}
+        <button type="button" class="btn btn-success float-left">Start Testing</button>
+      {% elif task_detail.status_id.status == 'test' %}
+        <div class="d-flex flex-row">
+          <button type="button" class="btn btn-success float-left">Fail Test</button>
+          <button type="button" class="btn btn-success float-left">Review</button>
+        </div>
+      {% elif task_detail.status_id.status == 'rev' %}
+        <div class="d-flex flex-row">
+          <button type="button" class="btn btn-success float-left">Back To Testing</button>
+          <button type="button" class="btn btn-success float-left">Approve</button>
+        </div>
+      {% elif task_detail.status_id.status == 'appr' %}
+        <button type="button" class="btn btn-success float-left">Release</button>
+      {% elif task_detail.status_id.status == 'rel' %}
+        <button type="button" class="btn btn-success float-left">Coming soon</button>
+      {% endif %} {% endcomment %}
+      <a href="{{ task_detail.project_id.get_absolute_url }}" type="button" class="btn btn-success float-left">Back to Projects</a>
+       <div class="modal fade" id="modalDeleteForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+          aria-hidden="true">
+         <form method="POST">
+            {% csrf_token %} 
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Delete Task</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body mx-3">
+                <div class="md-form mb-5">
+                 <input type="text" id="delete-task" name="delete-task" class="form-control validate">
+                  <p>Are you sure you want to delete this task?</p>
+                </div>
+
+              </div>
+              <div class="modal-footer d-flex justify-content-center">
+                <button type="submit" id="btn-delete"
+                 class="btn btn-deep-orange">Submit</button>
+              </div>
+            </div>
+          </div>
+           </form>
+        </div>
+      <a type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#modalDeleteForm">Delete</a>
+    </div>
+  </div>
+
+
+
+  <div class="row">
+    <div class="col-8 border-right">
+      {% comment %} <div class="container"> {% endcomment %}
+        <div class="d-flex flex-column">
+          <div class="p-2">
+            <h4 class="note note-primary text-center">
+              {% if task_detail.status_id.status == 'ass' %}
+                This Task is in <strong>Assigned</strong>
+              {% elif task_detail.status_id.status == 'prog' %}
+                This Task is in <strong>Progress</strong>
+              {% elif task_detail.status_id.status == 'comp' %}
+                This Task is in <strong>Completed</strong>
+              {% elif task_detail.status_id.status == 'test' %}
+                This Task is in <strong>Testing</strong>
+              {% elif task_detail.status_id.status == 'rev' %}
+                This Task is in <strong>Review</strong>
+              {% elif task_detail.status_id.status == 'appr' %}
+                This Task is in <strong>Approved</strong>
+              {% elif task_detail.status_id.status == 'rel' %}
+                This Task has been <strong>Released</strong>
+              {% endif %}
+            </h4>
+          </div>
+          <div class="p-2">
+          <p>Name of Task: <strong>{{ task_detail.name }}</strong></p>
+          </div>
+          <div class="p-2">
+            <p>Assigned To: <strong>{{ task_detail.user_id.full_name }}</strong></p>
+          </div>
+        </div>
+      {% comment %} </div> {% endcomment %}
+        <button id="edittask" type="button" class="btn btn-primary">Edit Task</button>
+        <div id="taskform" style="display: none;" class="container">
+          <form class="text-center border border-light p-5" method='POST'>
+          {% csrf_token %}
+          <p class="h4 mb-4">Contact us</p>
+
+          <!-- Name -->
+          <input type="text" id="defaultContactFormName" class="form-control mb-4" name="task_name" value="{{ task_detail.name }}">
+
+          <!-- Subject -->
+          <label>Assign to</label>
+          <select name="assign_to" class="browser-default custom-select mb-4">
+             <option value="" disabled selected>Select Assignee</option>
+          {% for user in users %}
+              <option value='{{ user.pk }}'>{{ user.full_name }}</option>
+              {% comment %} <option value="2">Report a bug</option>
+              <option value="3">Feature request</option>
+              <option value="4">Feature request</option> {% endcomment %}
+          {% endfor %}
+          </select>
+
+          <label>Change Task Status</label>
+          <select name="status" class="browser-default custom-select mb-4">
+            <option value="" disabled selected>Select new status</option>
+            {% if task_detail.status_id.status == 'ass' %}
+               <option value='prog'>Start Task</option>
+            {% elif task_detail.status_id.status == 'prog' %}
+              <option value="comp">Finish</option>
+            {% elif task_detail.status_id.status == 'comp' %}
+              <option value="test">Start Testing</option>
+            {% elif task_detail.status_id.status == 'test' %}
+             {% if request.user.role == 'QA' or request.user.is_admin %}
+                <option value="prog">Fail Test</option>
+                <option value="rev">Review</option>
+              {% else %}
+                <option value="ass">Back to Assign</option>
+              {% endif %}
+            {% elif task_detail.status_id.status == 'rev' %}
+              {% if request.user.role == 'QA' or request.user.role == 'PR' or request.user.is_admin %}
+              <option value="test">Back To Testing</option>
+                <option value="appr">Approve</option>
+              {% else %}
+                <option value="ass">Back to Assign</option>
+              {% endif %}
+            {% elif task_detail.status_id.status == 'appr' %}
+              {% if request.user.role == 'PR' or request.user.is_admin %}
+                <option value="rel">Release</option>
+              {% endif %}
+            {% elif task_detail.status_id.status == 'rel' %}
+                <option value="ass">Back to Assign</option>
+                
+            {% endif %}
+          </select>
+
+          <!-- Message -->
+          {% comment %} <div class="form-group">
+              <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3" placeholder="Message"></textarea>
+          </div> {% endcomment %}
+
+
+          <!-- Send button -->
+          <div class="row">
+            <div class="col-6">
+              <button class="btn btn-info btn-block" type="submit">Send</button>
+            </div>
+            <div class="col-6">
+              <button id="discard" class="btn btn-info btn-block">Discard</button>
+            </div>
+          </div>
+          
+          
+        </form>
+      </div>
+    </div>
+
+    <div style="background-color: rgba(62, 69, 81, 0.3); " class="col-4 border-left">
+      <div class="d-flex flex-column h-100">
+          <div class="p-2">
+            <i id="lognote" class="fas fa-comment"></i>
+          </div>
+          <div class="p-2">
+            <form id="lognoteform" style="display: none;" method='POST'>
+              {% csrf_token %}
+              <div class="form-group">
+                {% comment %} <label for="exampleFormControlTextarea2">Small textarea</label> {% endcomment %}
+                <textarea name="message" class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3"></textarea>
+                <button type="submit" class="btn btn-primary btn-rounded btn-sm">Log a note</button>
+              </div>
+            </form>
+          </div>
+
+          {% for log in logs %}
+            <div class="p-2 mt-3 border border-dark">
+              {{ log.messages }}
+            </div>
+          {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    
+  </div>
+ 
+ <script type="text/javascript">
+  const taskform = document.getElementById("taskform");
+  const edittask = document.querySelector('#edittask');
+  const discard = document.querySelector('#discard');
+  const lognote = document.querySelector('#lognote');
+  const lognoteform = document.querySelector('#lognoteform');
+  const btndelete = document.querySelector('#btn-delete');
+  const deletetask = document.querySelector('#delete-task');
+
+  {% comment %} const rbs = document.querySelectorAll('input[name="form-check-input"]'); {% endcomment %}
+    {% comment %} if(btn.checked) {
+        divworkplace.style.display = "block";  
+    }  {% endcomment %}
+    taskform.style.display = "none";
+    lognoteform.style.display = "none";
+
+    edittask.addEventListener("click", function(){
+        taskform.style.display = "block";
+        edittask.style.display = "none";
+        console.log("project");
+    });
+    discard.addEventListener("click", function(){
+        taskform.style.display = "none";
+        edittask.style.display = "block";
+        console.log("discard");
+    });
+    lognote.addEventListener("click", function(){
+        //taskform.style.display = "none";
+        lognoteform.style.display = "block";
+        console.log("discard");
+    });
+    btndelete.addEventListener("click", function(){
+        //taskform.style.display = "none";
+        deletetask.value = "delete";
+        console.log("discard");
+    });
+
+</script>
+{% endblock %}

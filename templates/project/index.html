@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <!--Main layout-->
+  
+    {% comment %} <div class="container"> {% endcomment %}
+{% if request.user.is_active == True %}
+    <div class="row mx-auto">
+       
+             {% comment %} <div class="col-2">
+                <div id="list-example" class="list-group">
+                  <a class="list-group-item list-group-item-action active" href="#list-item-1">Item 1</a>
+                  <a class="list-group-item list-group-item-action" href="#list-item-2">Item2</a>
+                  <a class="list-group-item list-group-item-action" href="#list-item-3">Item 3</a>
+                  <a class="list-group-item list-group-item-action" href="#list-item-4">Item 4</a>
+                </div>
+              </div> {% endcomment %}
+              <div class="sidebar">
+              {% if request.user.is_admin %}
+                <a href="{% url 'account:manage_users' request.user.workplace_id.name %}">Manage Users</a>
+                {% endif %}
+                <a href="#news">All Tasks</a>
+                <a href="{% url 'projects:index' request.user.workplace_id.name %}">Project</a>
+                <a href="{% url 'account:user-detail' request.user.slug request.user.workplace_id %}">Settings</a>
+              </div>
+              {% comment %} <div class="col-10"> {% endcomment %}
+              {% comment %} <div class="content"> {% endcomment %}
+                <div class="container">
+                {% block index_content %}
+                {% endblock index_content %}
+                </div>
+              {% comment %} </div> {% endcomment %}
+              {% comment %} </div> {% endcomment %}
+     </div>
+{% else %}
+  <h3>Please activate your account with the link sent to your email!</h3>
+{% endif %}
+
+  <!--Main layout-->
+
+
+{% endblock %}

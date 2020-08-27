@@ -1,0 +1,64 @@
+{% extends "project/index.html" %}
+
+{% block index_content %}
+  <!--Main layout-->
+{% if users_count > 1 %}
+  <p>we have users</p>
+{% else %}
+  <p>We dont have</p>
+{% endif %}
+<h5>Manage Users</h5>
+{% comment %} <div class="container">
+    <div class="row">
+        <div class="col-md-12 mb-4 text-center wow fadeIn"> {% endcomment %}
+        <a href="{% url 'account:invite-users' request.user.workplace_id %}" type="button" class="btn btn-secondary float-left">Add Users</a>
+            <div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">No.</th>
+        <th scope="col">Users</th>
+        <th scope="col">Role</th>
+         {% comment %}
+        <th scope="col">Heading</th>
+        <th scope="col">Heading</th>
+        <th scope="col">Heading</th>
+        <th scope="col">Heading</th>
+        <th scope="col">Heading</th>
+        <th scope="col">Heading</th>
+        <th scope="col">Heading</th> {% endcomment %}
+      </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td><a href="{% url 'account:user-detail' user.slug user.workplace_id %}">{{ user.full_name }}</a></td>
+        {% if user.role == 'US' %}
+        <td>user</td>
+        {% elif user.role == 'PR' %}
+        <td>project manager</td>
+        {% elif request.user.is_admin %}
+        <td>Administrator</td>
+        {% elif user.role == 'QA' %}
+        <td>Quality analyst</td>
+        {% endif %}
+         {% comment %}
+        <td>Cell</td>
+        <td>Cell</td>
+        <td>Cell</td>
+        <td>Cell</td>
+        <td>Cell</td>
+        <td>Cell</td>
+        <td>Cell</td> {% endcomment %}
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+        {% comment %} </div>
+    </div>
+</div> {% endcomment %}
+
+
+{% endblock %}

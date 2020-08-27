@@ -1,0 +1,34 @@
+
+  <!--/.Carousel Wrapper-->
+{% extends "base.html" %}
+
+{% block content %}
+  <!--Main layout-->
+  
+    <div class="container">
+
+    <div class="row mx-auto">
+        <div class="col-md-12 mb-4 text-center wow fadeIn">
+          <h3 class="display-3 font-weight-bold mb-0 pt-md-5 pt-5">Project Managemnet</h3>
+          <hr class="hr-dark my-4 w-75">
+          <h4 class="subtext-header mt-2 mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing
+            elit deleniti consequuntur nihil.A test</h4>
+        <div class="d-flex justify-content-center">
+          <div class="p-2"> <a type="button" class="btn btn-primary" href="{% url 'account:signup' %}">Signup</a></div>
+          <div class="p-2"><a type="button" class="btn btn-default" href="{% url 'account:login' %}">login</a></div>
+          {% comment %} <div class="p-2">Flex item 3</div> {% endcomment %}
+        </div>
+         
+          
+        </div>
+        {% comment %} <div class="col">
+          2 of 2
+        </div> {% endcomment %}
+      </div>
+
+    </div>
+
+  <!--Main layout-->
+
+
+{% endblock %}

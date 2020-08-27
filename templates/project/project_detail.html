@@ -1,0 +1,214 @@
+{% extends "project/index.html" %}
+
+{% block index_content %}
+  <!--Main layout-->
+
+<h2 class="text-center">Projects</h2>
+{% comment %} <div class="container">
+    <div class="row">
+        <div class="col-md-12 mb-4 text-center wow fadeIn"> {% endcomment %}
+          
+        {% comment %} </div>
+    </div>
+</div> {% endcomment %}
+  <div class="row">
+    <h2>Project Detail</h2>
+    {% comment %} <a href="#" class="feedback-form-btn btn btn-success btn-lg" id="OpenForm">Feedback</a> {% endcomment %}
+    
+  </div>
+ 
+ <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <form method="POST">
+    {% csrf_token %}
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Create Task</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <i class="fas fa-user prefix grey-text"></i>
+          <input type="text" id="task-name" name="task" class="form-control validate">
+          <label data-error="wrong" data-success="right" for="task-name">Task name</label>
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button type="submit" class="btn btn-deep-orange">Submit</button>
+      </div>
+    </div>
+  </div>
+  </form>
+</div>
+
+<div class="text-center">
+  <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal" data-target="#modalRegisterForm">Create a Task</a>
+</div>
+
+<div class="row mt-5">
+  {% comment %} <div class="col-12"> {% endcomment %}
+    <div class="table-responsive">
+      <table class="table">
+        <thead class="black white-text">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Assigned</th>
+            <th scope="col">In progress</th>
+            <th scope="col">Completed</th>
+            <th scope="col">Testing</th>
+            <th scope="col">Review</th>
+            <th scope="col">Approved</th>
+            <th scope="col">Released</th>
+            {% comment %} <th scope="col">Heading</th>
+            <th scope="col">Heading</th> {% endcomment %}
+          </tr>
+        </thead>
+        <tbody>
+        {% if tasks %}
+          
+             {% for task in projects %}
+            <tr>
+             <th scope="row">1</th>
+              <td>
+                  {% for assigned in task.assigned %}
+                    <div style="width: 200px;" class="card badge badge-primary text-wrap mt-2 mb-2">
+                      <div class="card-body">
+                        <h5 class="card-title">
+                        <a href="{% url 'projects:task-detail' request.user.workplace_id task.slug assigned.pk assigned.name %}">
+                        {{ assigned.name }}
+                        </a>
+                        </h5>
+                        {% comment %} <p class="card-text">Some quick example text to build on the panel title and make up the bulk of the panel's content.</p> {% endcomment %}
+                        <a class="card-link">{{ assigned.user_id.full_name }}</a>
+                        <a class="card-link">delete</a>
+                      </div>
+                    </div></br>
+                    {% endfor %}
+              </td>
+              <td>
+                  {% for prog in task.progress %}
+                    <div style="width: 200px;" class="card badge badge-primary text-wrap mt-2 mb-2">
+                      <div class="card-body">
+                        <h5 class="card-title">
+                          <a href="{% url 'projects:task-detail' request.user.workplace_id task.slug prog.pk prog.name %}">
+                          {{ prog.name }}
+                          </a>
+                        </h5>
+                        {% comment %} <p class="card-text">Some quick example text to build on the panel title and make up the bulk of the panel's content.</p> {% endcomment %}
+                        <a class="card-link">{{ prog.user_id.full_name }}</a>
+                        <a class="card-link">delete</a>
+                      </div>
+                    </div></br>
+                    {% endfor %}
+              </td>
+
+              <td>
+                  {% for comp in task.completed %}
+                    <div style="width: 200px;" class="card badge badge-primary text-wrap mt-2 mb-2">
+                      <div class="card-body">
+                        <h5 class="card-title">
+                          <a href="{% url 'projects:task-detail' request.user.workplace_id task.slug comp.pk comp.name %}">
+                            {{ comp.name }}
+                          </a>
+                        </h5>
+                        {% comment %} <p class="card-text">Some quick example text to build on the panel title and make up the bulk of the panel's content.</p> {% endcomment %}
+                        <a class="card-link">{{ comp.user_id.full_name }}</a>
+                        <a class="card-link">delete</a>
+                      </div>
+                    </div></br>
+                    {% endfor %}
+              </td>
+
+               <td>
+                  {% for test in task.testing %}
+                    <div style="width: 200px;" class="card badge badge-primary text-wrap mt-2 mb-2">
+                      <div class="card-body">
+                        <h5 class="card-title">
+                          <a href="{% url 'projects:task-detail' request.user.workplace_id task.slug test.pk test.name %}">
+                            {{ test.name }}
+                          </a>
+                        </h5>
+                        {% comment %} <p class="card-text">Some quick example text to build on the panel title and make up the bulk of the panel's content.</p> {% endcomment %}
+                        <a class="card-link">{{ test.user_id.full_name }}</a>
+                        <a class="card-link">delete</a>
+                      </div>
+                    </div></br>
+                    {% endfor %}
+              </td>
+
+              <td>
+                  {% for rev in task.review %}
+                    <div style="width: 200px;" class="card badge badge-primary text-wrap mt-2 mb-2">
+                      <div class="card-body">
+                        <h5 class="card-title">
+                          <a href="{% url 'projects:task-detail' request.user.workplace_id task.slug rev.pk rev.name %}">
+                            {{ rev.name }}
+                          </a>
+                        </h5>
+                        {% comment %} <p class="card-text">Some quick example text to build on the panel title and make up the bulk of the panel's content.</p> {% endcomment %}
+                        <a class="card-link">{{ rev.user_id.full_name }}</a>
+                        <a class="card-link">delete</a>
+                      </div>
+                    </div></br>
+                    {% endfor %}
+              </td>
+
+               <td>
+                  {% for appr in task.approved %}
+                    <div style="width: 200px;" class="card badge badge-primary text-wrap mt-2 mb-2">
+                      <div class="card-body">
+                        <h5 class="card-title">
+                          <a href="{% url 'projects:task-detail' request.user.workplace_id task.slug appr.pk appr.name %}">
+                            {{ appr.name }}
+                          </a>
+                        </h5>
+                        {% comment %} <p class="card-text">Some quick example text to build on the panel title and make up the bulk of the panel's content.</p> {% endcomment %}
+                        <a class="card-link">{{ appr.user_id.full_name }}</a>
+                        <a class="card-link">delete</a>
+                      </div>
+                    </div></br>
+                    {% endfor %}
+              </td>
+
+               <td>
+                  {% for rel in task.released %}
+                    <div style="width: 200px;" class="card badge badge-primary text-wrap mt-2 mb-2">
+                      <div class="card-body">
+                        <h5 class="card-title">
+                          <a href="{% url 'projects:task-detail' request.user.workplace_id task.slug rel.pk rel.name %}">
+                            {{ rel.name }}
+                          </a>
+                        </h5>
+                        {% comment %} <p class="card-text">Some quick example text to build on the panel title and make up the bulk of the panel's content.</p> {% endcomment %}
+                        <a class="card-link">{{ rel.user_id.full_name }}</a>
+                        <a class="card-link">delete</a>
+                      </div>
+                    </div></br>
+                    {% endfor %}
+              </td>
+            </tr>
+          {% endfor %}
+        {% else %}
+        <h2>NO taks for this project yet, please create one!</h2>
+        {% endif %}
+        </tbody>
+      </table>
+    </div>
+  {% comment %} </div> {% endcomment %}
+  
+</div>
+
+<script type="text/javascript">
+   $(document).ready(function(){
+        $("#OpenForm").click(function(){
+            $(".feedback_form_area").animate({
+                width: "toggle"
+            });
+        });
+    });
+</script>
+{% endblock %}
