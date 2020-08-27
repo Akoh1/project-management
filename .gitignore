@@ -48,12 +48,12 @@ env.bak/
 venv.bak/ 
 
 # Settings
-manage.py
-project_management/wsgi.py
+# manage.py
+# project_management/wsgi.py
 project_management/settings/production.py
 *production.py
-*wsgi.py
-*manage.py
+# *wsgi.py
+# *manage.py
 
 # Distribution / packaging 
 .Python build/ 
